@@ -700,14 +700,12 @@
                 return false;
             }
         });
-
-        // Tạo hiệu ứng hiển thị lần lượt các phần tử khi trang tải xong
-        document.addEventListener('DOMContentLoaded', function() {
-            // Thêm class loaded cho body để tạo hiệu ứng fade in tổng thể
-            setTimeout(function() {
-                document.body.classList.add('loaded');
-            }, 100);
-        });
+    </script>
+        <script>
+        // Kiểm tra nếu người dùng nhấn F5 (tức là reload trang)
+        if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+            window.location.href = "index.html"; // Quay về index.html
+        }
     </script>
 </head>
 <body>
