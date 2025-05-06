@@ -418,7 +418,7 @@
         
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+
     <!-- Thêm Script bảo vệ JS -->
     <script>
         // Lưu trữ nội dung HTML gốc
@@ -688,32 +688,26 @@
                 return 'Trang web này được bảo vệ!';
             }
         });
+    </script>
+    
+    <!-- Simple script to redirect to index on F5 -->
+    <script>
+        // Redirect to index.html when F5 is pressed
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F5') {
+                e.preventDefault();
+                window.location.href = 'index.html';
+                return false;
+            }
+        });
 
-    // Tạo hiệu ứng hiển thị lần lượt các phần tử khi trang tải xong
-document.addEventListener('DOMContentLoaded', function() {
-    // Thêm class loaded cho body để tạo hiệu ứng fade in tổng thể
-    setTimeout(function() {
-        document.body.classList.add('loaded');
-    }, 100);
-    
-    // Lấy các phần tử cần hiệu ứng
-    const profileCard = document.querySelector('.profile-card');
-    const skillsSection = document.querySelector('.skills-section');
-    const aboutSection = document.querySelector('.about-section');
-    const hobbies = document.querySelectorAll('.hobby');
-    const footer = document.querySelector('.footer');
-    
-    // Hàm kiểm tra phần tử có trong viewport không
-    function isInViewport(element) {
-        const rect = element.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
-});
+        // Tạo hiệu ứng hiển thị lần lượt các phần tử khi trang tải xong
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thêm class loaded cho body để tạo hiệu ứng fade in tổng thể
+            setTimeout(function() {
+                document.body.classList.add('loaded');
+            }, 100);
+        });
     </script>
 </head>
 <body>
@@ -745,8 +739,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                       </div>
                     
-                      <audio id="audio" src="mp3/nhac.mp3"></audio>
-                    </div>
+                    <audio id="audio" src="mp3/nhac.mp3"></audio>
+                </div>
                 
                 <div class="social-links">
                     <a href="https://www.facebook.com/taolacheems28727/" target="_blank" class="social-link">
@@ -789,61 +783,9 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
           
-          <audio id="audio" src="mp3/nhac.mp3"></audio>
-          
-          <script>
-            const audio = document.getElementById("audio");
-            const playBtn = document.getElementById("play");
-            const prevBtn = document.getElementById("prev");
-            const nextBtn = document.getElementById("next");
-            const progress = document.getElementById("progress");
-            const current = document.getElementById("current");
-            const duration = document.getElementById("duration");
-          
-            function formatTime(seconds) {
-              const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-              const s = Math.floor(seconds % 60).toString().padStart(2, '0');
-              return `${m}:${s}`;
-            }
-          
-            audio.addEventListener("loadedmetadata", () => {
-              duration.textContent = formatTime(audio.duration);
-              progress.max = audio.duration;
-            });
-          
-            audio.addEventListener("timeupdate", () => {
-              progress.value = audio.currentTime;
-              current.textContent = formatTime(audio.currentTime);
-            });
-          
-            progress.addEventListener("input", () => {
-              audio.currentTime = progress.value;
-            });
-          
-            playBtn.addEventListener("click", () => {
-              if (audio.paused) {
-                audio.play();
-                playBtn.textContent = "⏸";
-              } else {
-                audio.pause();
-                playBtn.textContent = "▶";
-              }
-            });
-          
-            prevBtn.addEventListener("click", () => {
-              audio.currentTime = 0;
-            });
-          
-            nextBtn.addEventListener("click", () => {
-              audio.currentTime = audio.duration;
-            });
-          
-            // Reset nút play khi nhạc kết thúc
-            audio.addEventListener("ended", () => {
-              playBtn.textContent = "▶";
-            });
-          </script>
-          
+        <div id="animatedContent" class="about-content">
+            <!-- Nội dung sẽ được thêm bởi JavaScript -->
+        </div>
         
         <div class="skills-section">
             <h2 class="skills-title">Programming Skills</h2>
@@ -909,7 +851,60 @@ document.addEventListener('DOMContentLoaded', function() {
             <p>© 2025 Herin | Last updated: May 2025</p>
         </div>
     </div>
+    
     <script>
+        const audio = document.getElementById("audio");
+        const playBtn = document.getElementById("play");
+        const prevBtn = document.getElementById("prev");
+        const nextBtn = document.getElementById("next");
+        const progress = document.getElementById("progress");
+        const current = document.getElementById("current");
+        const duration = document.getElementById("duration");
+      
+        function formatTime(seconds) {
+          const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+          const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+          return `${m}:${s}`;
+        }
+      
+        audio.addEventListener("loadedmetadata", () => {
+          duration.textContent = formatTime(audio.duration);
+          progress.max = audio.duration;
+        });
+      
+        audio.addEventListener("timeupdate", () => {
+          progress.value = audio.currentTime;
+          current.textContent = formatTime(audio.currentTime);
+        });
+      
+        progress.addEventListener("input", () => {
+          audio.currentTime = progress.value;
+        });
+      
+        playBtn.addEventListener("click", () => {
+          if (audio.paused) {
+            audio.play();
+            playBtn.textContent = "⏸";
+          } else {
+            audio.pause();
+            playBtn.textContent = "▶";
+          }
+        });
+      
+        prevBtn.addEventListener("click", () => {
+          audio.currentTime = 0;
+        });
+      
+        nextBtn.addEventListener("click", () => {
+          audio.currentTime = audio.duration;
+        });
+      
+        // Reset nút play khi nhạc kết thúc
+        audio.addEventListener("ended", () => {
+          playBtn.textContent = "▶";
+        });
+        
+        // Animated content
         const content = [
             "Tôi là người Việt nam",
             "Tôi thích chơi game vào lúc thời gian rảnh trong này ;v"
@@ -947,4 +942,3 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>
-
