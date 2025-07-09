@@ -1,0 +1,494 @@
+/* ===== ANIME-STYLE LOADING PAGE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-purple: #8B5CF6;
+    --secondary-pink: #EC4899;
+    --accent-cyan: #06B6D4;
+    --accent-yellow: #F59E0B;
+    --dark-bg: #0F0F23;
+    --darker-bg: #050510;
+    --text-white: #FFFFFF;
+    --text-glow: #E0E7FF;
+    --magic-glow: #A855F7;
+    --success-green: #10B981;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--dark-bg);
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ===== ANIMATED BACKGROUND ===== */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://media.discordapp.net/attachments/1377555107364868166/1392252556972920984/ruby-hoshino-en-oshi-no-ko.png?ex=686edbbc&is=686d8a3c&hm=5e0c888964de2b1b4076a5a18744f4280fced283d2e247ed07f35bcaa61e224a&=&format=webp&quality=lossless');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -3;
+}
+
+/* Add overlay to make text more readable */
+.animated-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(15, 15, 35, 0.7) 0%,
+        rgba(26, 26, 46, 0.6) 50%,
+        rgba(22, 33, 62, 0.8) 100%
+    );
+    z-index: 1;
+}
+
+.nebula {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+    animation: nebulaFloat 20s ease-in-out infinite;
+}
+
+.cosmic-dust {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(139, 92, 246, 0.4), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(236, 72, 153, 0.3), transparent);
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    animation: cosmicDrift 30s linear infinite;
+}
+
+.stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: starTwinkle 2s ease-in-out infinite alternate;
+}
+
+/* ===== MAGIC PARTICLES ===== */
+.magic-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.magic-particle {
+    position: absolute;
+    background: linear-gradient(45deg, var(--primary-purple), var(--secondary-pink));
+    border-radius: 50%;
+    animation: magicFloat 8s ease-in-out infinite;
+    box-shadow: 0 0 10px currentColor;
+}
+
+/* ===== MAIN LOADING CONTAINER ===== */
+.loading-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 20px;
+}
+
+/* ===== MAGICAL CIRCLE ===== */
+.magic-circle {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 40px;
+}
+
+.outer-ring, .middle-ring, .inner-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid;
+    animation: ringRotate 10s linear infinite;
+}
+
+.outer-ring {
+    width: 200px;
+    height: 200px;
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 20px var(--primary-purple);
+    animation-direction: normal;
+}
+
+.middle-ring {
+    width: 150px;
+    height: 150px;
+    top: 25px;
+    left: 25px;
+    border-color: var(--secondary-pink);
+    box-shadow: 0 0 15px var(--secondary-pink);
+    animation-direction: reverse;
+    animation-duration: 8s;
+}
+
+.inner-ring {
+    width: 100px;
+    height: 100px;
+    top: 50px;
+    left: 50px;
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 10px var(--accent-cyan);
+    animation-duration: 6s;
+}
+
+/* ===== AVATAR STYLING ===== */
+.avatar-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+}
+
+.magical-aura {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: auraGlow 3s ease-in-out infinite;
+}
+
+.avatar-glow {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(45deg, var(--primary-purple), var(--secondary-pink));
+    border-radius: 50%;
+    animation: avatarGlow 2s ease-in-out infinite;
+    filter: blur(8px);
+}
+
+.avatar-img {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--text-white);
+    object-fit: cover;
+    z-index: 2;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    animation: avatarFloat 4s ease-in-out infinite;
+}
+
+.avatar-frame {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 110px;
+    height: 110px;
+    border: 2px solid var(--accent-yellow);
+    border-radius: 50%;
+    animation: frameRotate 15s linear infinite;
+}
+
+.frame-glow {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 120px;
+    height: 120px;
+    border: 1px solid var(--accent-yellow);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--accent-yellow);
+    animation: frameGlow 2s ease-in-out infinite alternate;
+}
+
+/* ===== TITLE STYLING ===== */
+.loading-text-container {
+    margin-bottom: 40px;
+}
+
+.main-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+}
+
+.title-glow {
+    display: inline-block;
+    color: var(--text-white);
+    text-shadow: 
+        0 0 10px var(--primary-purple),
+        0 0 20px var(--primary-purple),
+        0 0 30px var(--primary-purple);
+    animation: letterGlow 2s ease-in-out infinite alternate;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.title-glow.animate {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.title-accent {
+    display: inline-block;
+    color: var(--secondary-pink);
+    text-shadow: 
+        0 0 10px var(--secondary-pink),
+        0 0 20px var(--secondary-pink);
+    margin-left: 10px;
+    animation: accentGlow 2s ease-in-out infinite alternate;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.title-accent.animate {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.loading-subtitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    color: var(--text-glow);
+    font-weight: 300;
+}
+
+.loading-subtitle i {
+    color: var(--accent-yellow);
+    animation: iconSpin 3s linear infinite;
+}
+
+.dots {
+    display: flex;
+    gap: 5px;
+}
+
+.dots span {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    animation: dotBounce 1.5s ease-in-out infinite;
+}
+
+.dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-container {
+    width: 400px;
+    margin-bottom: 30px;
+}
+
+.progress-bg {
+    position: relative;
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary-purple), var(--secondary-pink), var(--accent-cyan));
+    border-radius: 20px;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.progress-glow {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 16px;
+    background: linear-gradient(90deg, var(--primary-purple), var(--secondary-pink), var(--accent-cyan));
+    border-radius: 20px;
+    filter: blur(8px);
+    opacity: 0.7;
+    animation: progressGlow 2s ease-in-out infinite;
+}
+
+.progress-spark {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, var(--text-white) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: sparkGlow 1s ease-in-out infinite;
+}
+
+.progress-percentage {
+    margin-top: 15px;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-white);
+    text-shadow: 0 0 10px var(--accent-cyan);
+}
+
+/* ===== STATUS MESSAGES ===== */
+.status-messages {
+    min-height: 30px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1rem;
+    color: var(--text-glow);
+    animation: statusFade 0.5s ease-in-out;
+}
+
+.status-item i {
+    color: var(--accent-yellow);
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+/* ===== FLOATING ELEMENTS ===== */
+.floating-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.floating-icon {
+    position: absolute;
+    font-size: 1.5rem;
+    color: var(--accent-yellow);
+    animation: floatUpDown var(--duration) ease-in-out infinite;
+    animation-delay: var(--delay);
+    opacity: 0.7;
+}
+
+.floating-icon:nth-child(1) { top: 20%; left: 10%; }
+.floating-icon:nth-child(2) { top: 30%; right: 15%; }
+.floating-icon:nth-child(3) { bottom: 30%; left: 20%; }
+.floating-icon:nth-child(4) { bottom: 20%; right: 10%; }
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2rem;
+        letter-spacing: 2px;
+    }
+    
+    .progress-container {
+        width: 300px;
+    }
+    
+    .magic-circle {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .outer-ring {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .middle-ring {
+        width: 110px;
+        height: 110px;
+        top: 20px;
+        left: 20px;
+    }
+    
+    .inner-ring {
+        width: 70px;
+        height: 70px;
+        top: 40px;
+        left: 40px;
+    }
+    
+    .avatar-container {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .avatar-img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* ===== LOADING COMPLETE ANIMATION ===== */
+.loading-complete {
+    animation: fadeOut 1s ease-in-out forwards;
+}
+
+.loading-complete .magic-circle {
+    animation: scaleUp 1s ease-in-out forwards;
+}
+
+.loading-complete .main-title {
+    animation: titleFadeOut 1s ease-in-out forwards;
+}
