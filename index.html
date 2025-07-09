@@ -3,211 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading - Herin's Profile</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #111;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('./png/omg.gif');
-            background-size: cover;
-            background-position: center;
-            filter: blur(8px);
-            opacity: 0.3;
-            z-index: -1;
-        }
-        
-        .content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 1;
-        }
-        
-        .avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 5px solid #ffffff;
-            overflow: visible;
-            position: relative;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        
-        .frame {
-            position: absolute;
-            width: 160px;
-            height: 160px;
-            top: -5px;
-            left: -5px;
-            z-index: 2;
-            pointer-events: none;
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
-        }
-        
-        .loading-text {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-        }
-        
-        .loading-bar {
-            width: 250px;
-            height: 6px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .progress {
-            height: 100%;
-            background-color: #1877f2;
-            width: 0%;
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-        
-        .percentage {
-            color: #ffffff;
-            font-size: 14px;
-            text-align: center;
-            margin-top: 8px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-        }
-        
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            pointer-events: none;
-            z-index: -1;
-        }
-    </style>
+    <title>✨ Loading - Herin's Magical Profile ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="style2.css">
 </head>
 <body>
-    <div class="background"></div>
-    <div class="particles" id="particles"></div>
-    
-    <div class="content">
-        <div class="avatar">
-            <img class="avatar-img" src="./png/mmmb.jpg" alt="Avatar">
-            <img class="frame" src="https://cdn.discordapp.com/avatar-decoration-presets/a_a87e3efa4de2956331831681231ce63b.png?size=96&passthrough=true" alt="Heart Frame">
-        </div>
-        <div class="loading-text">Đang tải hồ sơ...</div>
-        <div class="loading-bar">
-            <div class="progress" id="progress"></div>
-        </div>
-        <div class="percentage" id="percentage">0%</div>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="stars"></div>
+        <div class="nebula"></div>
+        <div class="cosmic-dust"></div>
     </div>
     
+    <!-- Magic Particles -->
+    <div class="magic-particles" id="magicParticles"></div>
+    
+    <!-- Main Loading Content -->
+    <div class="loading-container">
+        <!-- Magical Circle -->
+        <div class="magic-circle">
+            <div class="outer-ring"></div>
+            <div class="middle-ring"></div>
+            <div class="inner-ring"></div>
+            
+            <!-- Avatar with Magical Aura -->
+            <div class="avatar-container">
+                <div class="magical-aura"></div>
+                <div class="avatar-glow"></div>
+                <img class="avatar-img" src="./png/mmmb.jpg" alt="Herin's Avatar">
+                <div class="avatar-frame">
+                    <div class="frame-glow"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading Text with Typewriter Effect -->
+        <div class="loading-text-container">
+            <h1 class="main-title">
+                <span class="title-glow">H</span>
+                <span class="title-glow">e</span>
+                <span class="title-glow">r</span>
+                <span class="title-glow">i</span>
+                <span class="title-glow">n</span>
+                <span class="title-accent">'s</span>
+                <span class="title-accent">Profile</span>
+            </h1>
+            <div class="loading-subtitle">
+                <i class="fas fa-magic"></i>
+                <span id="loadingText">Đang khởi tạo thế giới ma thuật...</span>
+                <div class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Anime-style Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bg">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-glow"></div>
+                <div class="progress-spark" id="progressSpark"></div>
+            </div>
+            <div class="progress-percentage" id="progressPercentage">0%</div>
+        </div>
+        
+        <!-- Status Messages -->
+        <div class="status-messages" id="statusMessages">
+            <div class="status-item">
+                <i class="fas fa-star"></i>
+                <span>Đang tải tài nguyên...</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating Elements -->
+    <div class="floating-elements">
+        <div class="floating-icon" style="--delay: 0s; --duration: 3s;">
+            <i class="fas fa-heart"></i>
+        </div>
+        <div class="floating-icon" style="--delay: 1s; --duration: 4s;">
+            <i class="fas fa-star"></i>
+        </div>
+        <div class="floating-icon" style="--delay: 2s; --duration: 3.5s;">
+            <i class="fas fa-sparkles"></i>
+        </div>
+        <div class="floating-icon" style="--delay: 0.5s; --duration: 4.5s;">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
     <script>
-        // Tạo hiệu ứng particle
-        function createParticles() {
-            const particles = document.getElementById('particles');
-            const particleCount = 50;
+        // Loading messages for different stages
+        const loadingMessages = [
+            "Đang khởi tạo thế giới ma thuật...",
+            "Đang tải avatar và trang trí...",
+            "Đang kết nối với Discord...",
+            "Đang chuẩn bị giao diện...",
+            "Đang tối ưu hóa trải nghiệm...",
+            "Sắp hoàn thành rồi..."
+        ];
+
+        const statusMessages = [
+            { icon: "fas fa-star", text: "Đang tải tài nguyên..." },
+            { icon: "fas fa-image", text: "Đang tải hình ảnh..." },
+            { icon: "fab fa-discord", text: "Đang kết nối Discord..." },
+            { icon: "fas fa-palette", text: "Đang tải giao diện..." },
+            { icon: "fas fa-cog", text: "Đang tối ưu hóa..." },
+            { icon: "fas fa-check", text: "Hoàn thành!" }
+        ];
+
+        // Create magical particles
+        function createMagicalParticles() {
+            const container = document.getElementById('magicParticles');
+            const particleCount = 80;
             
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
-                particle.className = 'particle';
+                particle.className = 'magic-particle';
                 
-                // Đặt kích thước ngẫu nhiên
-                const size = Math.random() * 5 + 1;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // Đặt vị trí ngẫu nhiên
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                
-                // Đặt độ trong suốt ngẫu nhiên
-                particle.style.opacity = Math.random() * 0.5 + 0.3;
-                
-                // Đặt animation
-                const duration = Math.random() * 20 + 10;
+                // Random properties
+                const size = Math.random() * 6 + 2;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = Math.random() * 10 + 5;
                 const delay = Math.random() * 5;
                 
-                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                particle.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                `;
                 
-                particles.appendChild(particle);
+                container.appendChild(particle);
             }
         }
-        
-        // Cập nhật thanh tiến trình
+
+        // Create stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = Math.random() * 3 + 2;
+                
+                star.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    animation-duration: ${duration}s;
+                `;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Update progress with smooth animation
         function updateProgress() {
-            const progress = document.getElementById('progress');
-            const percentage = document.getElementById('percentage');
-            let width = 0;
+            const progressFill = document.getElementById('progressFill');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const progressSpark = document.getElementById('progressSpark');
+            const loadingText = document.getElementById('loadingText');
+            const statusContainer = document.getElementById('statusMessages');
+            
+            let progress = 0;
+            let messageIndex = 0;
+            let statusIndex = 0;
             
             const interval = setInterval(() => {
-                if (width >= 100) {
+                if (progress >= 100) {
                     clearInterval(interval);
-                    // Chuyển hướng đến trang profile sau khi tải xong
+                    
+                    // Final animation before redirect
+                    document.body.classList.add('loading-complete');
+                    
                     setTimeout(() => {
                         window.location.href = 'load.html';
-                    }, 500);
+                    }, 1000);
                 } else {
-                    width += 1;
-                    progress.style.width = width + '%';
-                    percentage.textContent = width + '%';
+                    progress += Math.random() * 2 + 0.5; // Variable speed
+                    if (progress > 100) progress = 100;
+                    
+                    // Update progress bar
+                    progressFill.style.width = progress + '%';
+                    progressSpark.style.left = progress + '%';
+                    progressPercentage.textContent = Math.floor(progress) + '%';
+                    
+                    // Update loading message
+                    const newMessageIndex = Math.floor((progress / 100) * loadingMessages.length);
+                    if (newMessageIndex !== messageIndex && newMessageIndex < loadingMessages.length) {
+                        messageIndex = newMessageIndex;
+                        loadingText.textContent = loadingMessages[messageIndex];
+                    }
+                    
+                    // Update status messages
+                    const newStatusIndex = Math.floor((progress / 100) * statusMessages.length);
+                    if (newStatusIndex !== statusIndex && newStatusIndex < statusMessages.length) {
+                        statusIndex = newStatusIndex;
+                        const status = statusMessages[statusIndex];
+                        statusContainer.innerHTML = `
+                            <div class="status-item">
+                                <i class="${status.icon}"></i>
+                                <span>${status.text}</span>
+                            </div>
+                        `;
+                    }
                 }
-            }, 30); // Tốc độ loading - có thể điều chỉnh
+            }, 50);
         }
-        
-        // Khởi tạo khi trang được tải
+
+        // Animate title letters
+        function animateTitle() {
+            const letters = document.querySelectorAll('.title-glow, .title-accent');
+            letters.forEach((letter, index) => {
+                setTimeout(() => {
+                    letter.classList.add('animate');
+                }, index * 100);
+            });
+        }
+
+        // Initialize everything
         window.addEventListener('load', () => {
-            createParticles();
-            updateProgress();
+            createMagicalParticles();
+            createStars();
+            animateTitle();
+            
+            setTimeout(() => {
+                updateProgress();
+            }, 1000);
         });
     </script>
 </body>
