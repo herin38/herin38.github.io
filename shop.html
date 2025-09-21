@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lấy Token Discord</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        body.light {
+            background: linear-gradient(135deg, #5865f2 0%, #7289da 100%);
+        }
+
+        body.dark {
+            background: linear-gradient(135deg, #2e2e2e 0%, #4a4a4a 100%);
+        }
+
+        .container {
+            background: var(--bg-color, #ffffff);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            max-width: 700px;
+            width: 100%;
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+            color: var(--text-color, #2e2e2e);
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        p {
+            line-height: 1.7;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .steps {
+            background: var(--steps-bg, #f8f9fa);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            transition: background 0.3s ease;
+        }
+
+        .steps h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            font-size: 16px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: #2f3136;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block::before {
+            content: "JavaScript";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #7289da;
+            font-size: 12px;
+            font-weight: 600;
+            background: #202225;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        pre {
+            margin: 0;
+        }
+
+        code {
+            color: #f8f8f2;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 80px;
+            background: #5865f2;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #404eed;
+        }
+
+        .copy-btn:active {
+            background: #3333aa;
+        }
+
+        a {
+            color: #5865f2;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #404eed;
+            text-decoration: underline;
+        }
+
+        .note {
+            background: var(--note-bg, #e3f0ff);
+            padding: 15px;
+            border-left: 4px solid #5865f2;
+            border-radius: 4px;
+            margin: 20px 0;
+            transition: background 0.3s ease;
+        }
+
+        .reference {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 15px;
+        }
+
+        .reference a {
+            background: #5865f2;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            display: inline-block;
+            transition: background 0.3s ease;
+        }
+
+        .reference a:hover {
+            background: #404eed;
+            text-decoration: none;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #5865f2;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: #404eed;
+        }
+
+        .theme-toggle:active {
+            background: #3333aa;
+        }
+
+        body.dark .container {
+            --bg-color: #36393f;
+            --text-color: #ffffff;
+        }
+
+        body.dark .steps {
+            --steps-bg: #2f3136;
+        }
+
+        body.dark .note {
+            --note-bg: #4a4a4a;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .steps h2 {
+                font-size: 20px;
+            }
+
+            p, li {
+                font-size: 14px;
+            }
+
+            code {
+                font-size: 13px;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+
+        @font-face {
+            font-family: 'Fira Code';
+            src: url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        }
+    </style>
+</head>
+<body class="light">
+    <button class="theme-toggle" onclick="toggleTheme()">Chuyển sang chế độ tối</button>
+    <div class="container">
+        <h1>Lấy Token Discord</h1>
+        <p>Thực hiện các bước sau để lấy token Discord của bạn bằng Chrome hoặc PC:</p>
+        
+        <div class="steps">
+            <h2>Các bước thực hiện</h2>
+            <ol>
+                <li>Truy cập <a href="https://discord.com" target="_blank">discord.com</a> bằng Chrome hoặc Google.</li>
+                <li>Chuyển sang phiên bản máy tính của trang web và đăng nhập vào tài khoản Discord của bạn.</li>
+                <li>Trong thanh địa chỉ của trình duyệt, nhập <code>javascript:</code> và dán đoạn mã sau ngay sau nó:</li>
+            </ol>
+            
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode()">Sao chép mã</button>
+                <pre><code>(function () {
+    location.reload();
+    var i = document.createElement('iframe');
+    document.body.appendChild(i);
+    prompt('Here is your token', i.contentWindow.localStorage.token.replace(/'/g, ''));
+})();</code></pre>
+            </div>
+            
+            <div class="note">
+                <p><strong>Lưu ý:</strong> Sau khi dán mã, hãy kiểm tra kỹ xem <code>javascript:</code> có ở đầu lệnh trong thanh địa chỉ hay không.</p>
+            </div>
+        </div>
+        
+        <div class="reference">
+            <p>Để biết thêm chi tiết, xem <a href="https://www.youtube.com/shorts/01AxSfeMnQM" target="_blank">video YouTube Shorts</a> về cách mua hàng tại Mèo Sĩ Tố.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+            if (body.classList.contains('light')) {
+                body.classList.replace('light', 'dark');
+                button.textContent = 'Chuyển sang chế độ sáng';
+            } else {
+                body.classList.replace('dark', 'light');
+                button.textContent = 'Chuyển sang chế độ tối';
+            }
+        }
+
+        function copyCode() {
+            const code = `(function () {
+    location.reload();
+    var i = document.createElement('iframe');
+    document.body.appendChild(i);
+    prompt('Here is your token', i.contentWindow.localStorage.token.replace(/'/g, ''));
+})();`;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Đã sao chép mã thành công!');
+            }).catch(err => {
+                alert('Lỗi khi sao chép mã: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>
