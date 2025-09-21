@@ -112,7 +112,7 @@
           </div>
 
         <div class="player">
-            <div class="track-info">Wrong Times ( ft. FOWLEX Snowz )</div>
+            <div class="track-info" id="trackInfo">Wrong Times ( ft. FOWLEX Snowz )</div>
             <div class="controls">
               <div class="time" id="current">00:00</div>
               <input type="range" id="progress" value="0" />
@@ -128,61 +128,165 @@
         <audio id="audio" src="mp3/nhac.mp3"></audio>
 
         <script>
-          const audio = document.getElementById("audio");
-          const playBtn = document.getElementById("play");
-          const prevBtn = document.getElementById("prev");
-          const nextBtn = document.getElementById("next");
-          const progress = document.getElementById("progress");
-          const current = document.getElementById("current");
-          const duration = document.getElementById("duration");
+const audio = document.getElementById("audio");
+const playBtn = document.getElementById("play");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+const progress = document.getElementById("progress");
+const current = document.getElementById("current");
+const duration = document.getElementById("duration");
+const trackInfo = document.getElementById("trackInfo");
 
-          function formatTime(seconds) {
-            const m = Math.floor(seconds / 60)
-              .toString()
-              .padStart(2, "0");
-            const s = Math.floor(seconds % 60)
-              .toString()
-              .padStart(2, "0");
-            return `${m}:${s}`;
-          }
+// Playlist với 2 bài hát
+const playlist = [
+  {
+    src: "mp3/nhac.mp3",
+    title: "Wrong Times ( ft. FOWLEX Snowz )"
+  },
+  {
+    src: "mp3/nhac2.mp3",
+    title: "《Cry For Me（feat。Ami》）»Michita / Ami完整版"
+  }
+];
 
-          audio.addEventListener("loadedmetadata", () => {
-            duration.textContent = formatTime(audio.duration);
-            progress.max = audio.duration;
-          });
+let currentTrack = 0;
+let isPlaying = false;
+let userInteracted = false;
 
-          audio.addEventListener("timeupdate", () => {
-            progress.value = audio.currentTime;
-            current.textContent = formatTime(audio.currentTime);
-          });
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60)
+    .toString()
+    .padStart(2, "0");
+  const s = Math.floor(seconds % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${m}:${s}`;
+}
 
-          progress.addEventListener("input", () => {
-            audio.currentTime = progress.value;
-          });
+function loadTrack(trackIndex) {
+  const track = playlist[trackIndex];
+  audio.src = track.src;
+  trackInfo.textContent = track.title;
+  audio.load();
+}
 
-          playBtn.addEventListener("click", () => {
-            if (audio.paused) {
-              audio.play();
-              playBtn.textContent = "⏸";
-            } else {
-              audio.pause();
-              playBtn.textContent = "▶";
-            }
-          });
+function nextTrack() {
+  currentTrack = (currentTrack + 1) % playlist.length;
+  loadTrack(currentTrack);
+  
+  // Tự động phát bài tiếp theo nếu người dùng đã tương tác với player
+  if (userInteracted && isPlaying) {
+    playTrack();
+  }
+}
 
-          prevBtn.addEventListener("click", () => {
-            audio.currentTime = 0;
-          });
+function prevTrack() {
+  currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+  loadTrack(currentTrack);
+  
+  // Tự động phát bài trước đó nếu người dùng đã tương tác với player
+  if (userInteracted && isPlaying) {
+    playTrack();
+  }
+}
 
-          nextBtn.addEventListener("click", () => {
-            audio.currentTime = audio.duration;
-          });
+function playTrack() {
+  audio.play().then(() => {
+    playBtn.textContent = "⏸";
+    isPlaying = true;
+  }).catch((error) => {
+    console.error("Không thể phát nhạc:", error);
+    playBtn.textContent = "▶";
+    isPlaying = false;
+  });
+}
 
-          // Reset nút play khi nhạc kết thúc
-          audio.addEventListener("ended", () => {
-            playBtn.textContent = "▶";
-          });
+function pauseTrack() {
+  audio.pause();
+  playBtn.textContent = "▶";
+  isPlaying = false;
+}
+
+// Event Listeners
+audio.addEventListener("loadedmetadata", () => {
+  if (!isNaN(audio.duration)) {
+    duration.textContent = formatTime(audio.duration);
+    progress.max = audio.duration;
+  }
+});
+
+audio.addEventListener("timeupdate", () => {
+  if (!isNaN(audio.currentTime)) {
+    progress.value = audio.currentTime;
+    current.textContent = formatTime(audio.currentTime);
+  }
+});
+
+progress.addEventListener("input", () => {
+  audio.currentTime = progress.value;
+  userInteracted = true;
+});
+
+playBtn.addEventListener("click", () => {
+  userInteracted = true;
+  
+  if (audio.paused) {
+    playTrack();
+  } else {
+    pauseTrack();
+  }
+});
+
+prevBtn.addEventListener("click", () => {
+  userInteracted = true;
+  prevTrack();
+});
+
+nextBtn.addEventListener("click", () => {
+  userInteracted = true;
+  nextTrack();
+});
+
+// Tự động chuyển bài khi nhạc kết thúc
+audio.addEventListener("ended", () => {
+  nextTrack();
+  
+  // Tự động phát bài tiếp theo nếu người dùng đã tương tác
+  if (userInteracted) {
+    setTimeout(() => {
+      playTrack();
+    }, 500); // Delay ngắn để đảm bảo bài mới đã load
+  }
+});
+
+// Xử lý khi không thể tải được bài hát
+audio.addEventListener("error", (e) => {
+  console.error("Lỗi tải bài hát:", playlist[currentTrack].src, e);
+  
+  // Tự động chuyển sang bài tiếp theo nếu có lỗi
+  setTimeout(() => {
+    nextTrack();
+  }, 1000);
+});
+
+// Xử lý khi bài hát có thể phát được
+audio.addEventListener("canplay", () => {
+  if (!isNaN(audio.duration)) {
+    duration.textContent = formatTime(audio.duration);
+    progress.max = audio.duration;
+  }
+});
+
+// Khởi tạo player
+loadTrack(currentTrack);
+
+// Thêm event listener để theo dõi tương tác của người dùng
+document.addEventListener("click", () => {
+  userInteracted = true;
+}, { once: true });
+
         </script>
+        
         </div>
 
         <div class="social-links">
