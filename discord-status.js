@@ -137,7 +137,7 @@ function updateDiscordStatus(userData) {
     statusHTML += '<div style="margin-top: 15px;">';
     
     if (activities.length > 0) {
-        statusHTML += '<div style="font-size: 1.1em; font-weight: bold; margin-bottom: 10px; color: #5865F2;">🎮 Hoạt động hiện tại:</div>';
+        statusHTML += '<div style="font-size: 1.1em; font-weight: bold; margin-bottom: 10px; color: #5865F2;">🎮 Hoạt động hiện tại</div>';
         activities.forEach((activity) => {
             if (activity.type === 4) {
                 // Custom Status
@@ -147,8 +147,8 @@ function updateDiscordStatus(userData) {
                             `<img src="https://cdn.discordapp.com/emojis/${activity.emoji.id}.${activity.emoji.animated ? 'gif' : 'png'}?size=24" style="width: 24px; height: 24px; margin-right: 8px;" alt="${activity.emoji.name}" onerror="this.style.display='none'">` 
                             : ''}
                         <div>
-                            <div style="font-size: 0.9em; color: #666;">Custom Status</div>
-                            <div style="font-weight: 500;">${activity.state || 'No custom status'}</div>
+                            <div style="font-size: 0.9em; color: #666;">hoạt động</div>
+                            <div style="font-weight: 500;">${activity.state || 'không có hoạt động nào'}</div>
                         </div>
                     </div>
                 `;
