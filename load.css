@@ -308,6 +308,22 @@ p {
     background-color: #00ADD8;
 }
 
+.nodejs {
+    background-color: #339933;
+}
+
+.nextjs {
+    background-color: #0070f3;
+}
+
+.linux {
+    background-color: #FCC624;
+}
+
+.sql {
+    background-color: #336791;
+}
+
 .skill-name {
     font-weight: bold;
     font-size: 1.2rem;
@@ -349,6 +365,26 @@ p {
 .golang-bar {
     width: 5%;
     background-color: #00ADD8;
+}
+
+.nodejs-bar {
+    width: 75%;
+    background-color: #339933;
+}
+
+.nextjs-bar {
+    width: 70%;
+    background-color: #0070f3;
+}
+
+.linux-bar {
+    width: 40%;
+    background-color: #FCC624;
+}
+
+.sql-bar {
+    width: 55%;
+    background-color: #336791;
 }
 
 /* ===== HOBBIES SECTION ===== */
