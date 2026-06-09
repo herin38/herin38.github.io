@@ -4,33 +4,52 @@ let retryTimer = null;
 const DISCORD_USER_ID = '1258094804487897252';
 
 async function fetchDiscordStatus() {
+    let lastError = null;
+    const cb = Date.now();
+    const directUrl = `https://api.notjdevelopment.baby/v1/users/${DISCORD_USER_ID}?_cb=${cb}`;
+    const targets = [
+        { name: 'Direct API', url: directUrl },
+        { name: 'CodeTabs Proxy', url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(directUrl)}` },
+        { name: 'AllOrigins Proxy', url: `https://api.allorigins.win/raw?url=${encodeURIComponent(directUrl)}` },
+        { name: 'CorsProxy.io', url: `https://corsproxy.io/?url=${encodeURIComponent(directUrl)}` }
+    ];
+
     try {
-        console.log('Fetching Discord status from API...');
-        const cb = Date.now();
-        const url = `https://api.notjdevelopment.baby/v1/users/${DISCORD_USER_ID}?_cb=${cb}`;
-        
-        const response = await fetch(url, {
-            method: 'GET'
-        });
+        for (const target of targets) {
+            try {
+                console.log(`Fetching Discord status via ${target.name}...`);
+                const response = await fetch(target.url, {
+                    method: 'GET'
+                });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP status ${response.status}`);
+                }
+
+                const data = await response.json();
+                let userData = null;
+                
+                if (data && data.success && data.data) {
+                    userData = data.data;
+                } else if (data && data.data && data.data.discord_user) {
+                    userData = data.data;
+                } else {
+                    throw new Error("Invalid structure");
+                }
+
+                retryCount = 0;
+                updateDiscordStatus(userData);
+                console.log(`Discord status updated successfully using ${target.name}`);
+                return; // Success! Exit function
+            } catch (error) {
+                console.warn(`Failed to fetch via ${target.name}:`, error);
+                lastError = error;
+            }
         }
 
-        const data = await response.json();
-        let userData = null;
-        
-        if (data && data.success && data.data) {
-            userData = data.data;
-        } else if (data && data.data && data.data.discord_user) {
-            userData = data.data;
-        } else {
-            throw new Error("API response did not contain expected data structure");
-        }
+        // If it got here, all targets failed
+        throw lastError || new Error("All fetch targets failed");
 
-        retryCount = 0;
-        updateDiscordStatus(userData);
-        console.log('Discord status updated successfully');
     } catch (error) {
         console.error('Error fetching Discord status:', error);
         
