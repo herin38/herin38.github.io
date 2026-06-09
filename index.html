@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@herin38</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="load.css?v=2.0.0" />
+    <script src="discord-status.js?v=2.0.0"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Start document title animation
+        startTitleAnimation();
+        const introScreen = document.getElementById("introScreen");
+        const introStart = document.querySelector(".intro-start");
+        let clickCount = 0;
+
+        function enterPage() {
+          introScreen.classList.add("hide");
+          document.body.classList.add("loaded");
+
+          const audio = document.getElementById("audio");
+          if (audio) {
+            audio.play().catch(() => {});
+          }
+
+          setTimeout(function () {
+            introScreen.remove();
+          }, 700);
+
+          setTimeout(startTypewriter, 1000);
+          setTimeout(startMouseTrail, 1000);
+        }
+
+        if (introScreen) {
+          introScreen.addEventListener("click", function () {
+            clickCount++;
+            if (window.discordProfileLoaded || clickCount >= 2) {
+              enterPage();
+            } else {
+              if (introStart) {
+                introStart.textContent = "[ wait to load ]";
+              }
+              window.onDiscordProfileLoaded = function () {
+                enterPage();
+              };
+            }
+          });
+        } else {
+          setTimeout(startTypewriter, 1000);
+          startMouseTrail();
+        }
+
+        function startTypewriter() {
+          const typewriterEl = document.getElementById("typewriter");
+          if (!typewriterEl) return;
+
+          const phrases = ["自分を変えてみてください", "食料、衣服、お金"];
+          let phraseIndex = 0;
+          let charIndex = typewriterEl.textContent.length;
+          let isDeleting = true;
+          let typingSpeed = 2000; // Pause initially for 2 seconds so user can read first phrase
+
+          function type() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+              typewriterEl.textContent = currentPhrase.substring(0, charIndex - 1);
+              charIndex--;
+              typingSpeed = 75;
+            } else {
+              typewriterEl.textContent = currentPhrase.substring(0, charIndex + 1);
+              charIndex++;
+              typingSpeed = 150;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+              isDeleting = true;
+              typingSpeed = 2500; // Pause at end of phrase
+            } else if (isDeleting && charIndex === 0) {
+              isDeleting = false;
+              phraseIndex = (phraseIndex + 1) % phrases.length;
+              typingSpeed = 500; // Pause before typing next phrase
+            }
+
+            setTimeout(type, typingSpeed);
+          }
+
+          type();
+        }
+
+        function startMouseTrail() {
+          const emojis = ['🍚', '👕', '🌾', '💵'];
+          let emojiIndex = 0;
+          let lastX = 0;
+          let lastY = 0;
+          const minDistance = 15;
+
+          document.addEventListener("mousemove", function (e) {
+            const x = e.pageX;
+            const y = e.pageY;
+            
+            const dist = Math.hypot(x - lastX, y - lastY);
+            if (dist < minDistance) return;
+
+            lastX = x;
+            lastY = y;
+
+            const particle = document.createElement("span");
+            particle.className = "emoji-trail-particle";
+            particle.textContent = emojis[emojiIndex];
+            emojiIndex = (emojiIndex + 1) % emojis.length;
+            
+            const dx = (Math.random() - 0.5) * 40; 
+            const rot = (Math.random() - 0.5) * 180;
+            const fontSize = Math.floor(Math.random() * 8) + 16; 
+            
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            particle.style.fontSize = `${fontSize}px`;
+            particle.style.setProperty('--dx', `${dx}px`);
+            particle.style.setProperty('--rot', `${rot}deg`);
+            
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+              particle.remove();
+            }, 1000);
+          });
+        }
+
+        function startTitleAnimation() {
+          const titleText = "@herin38";
+          let index = 1; // Start at 1 to ensure '@' is always visible
+          let isDeleting = false;
+          let timeoutId = null;
+          let blinkInterval = null;
+          let cursorVisible = true;
+          
+          function startBlink(currentText, callback, delay) {
+            let elapsed = 0;
+            cursorVisible = true;
+            document.title = currentText + " |";
+            
+            blinkInterval = setInterval(() => {
+              cursorVisible = !cursorVisible;
+              document.title = currentText + (cursorVisible ? " |" : "  ");
+              elapsed += 500;
+              if (elapsed >= delay) {
+                clearInterval(blinkInterval);
+                blinkInterval = null;
+                callback();
+              }
+            }, 500);
+          }
+
+          function animate() {
+            const current = titleText.substring(0, index);
+            document.title = current + " |";
+            
+            if (!isDeleting) {
+              index++;
+              if (index > titleText.length) {
+                isDeleting = true;
+                startBlink(titleText, animate, 2500);
+              } else {
+                timeoutId = setTimeout(animate, 300);
+              }
+            } else {
+              index--;
+              if (index < 1) { // Never delete the '@' character to avoid browser showing 'index.html'
+                isDeleting = false;
+                index = 1;
+                startBlink("@", animate, 1000);
+              } else {
+                timeoutId = setTimeout(animate, 150);
+              }
+            }
+          }
+          
+          animate();
+        }
+
+        // Scroll indicator click handler and scroll fade-out
+        const scrollIndicator = document.getElementById("scrollIndicator");
+        if (scrollIndicator) {
+          scrollIndicator.addEventListener("click", function () {
+            const projectsSection = document.getElementById("projectsSection");
+            if (projectsSection) {
+              projectsSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+              });
+            }
+          });
+
+          window.addEventListener("scroll", function () {
+            if (window.scrollY > 50) {
+              scrollIndicator.classList.add("fade-out");
+            } else {
+              scrollIndicator.classList.remove("fade-out");
+            }
+          });
+        }
+
+        // Anti-skid & copy prevention listeners
+        document.addEventListener("copy", function (e) {
+          e.preventDefault();
+        });
+        document.addEventListener("cut", function (e) {
+          e.preventDefault();
+        });
+        document.addEventListener("selectstart", function (e) {
+          e.preventDefault();
+        });
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+        });
+        document.addEventListener("keydown", function (e) {
+          // Block F12, Ctrl+Shift+I, Ctrl+U (View Source), Ctrl+S (Save), Ctrl+C (Copy), Ctrl+X (Cut)
+          if (
+            e.keyCode === 123 || 
+            (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
+            (e.ctrlKey && e.keyCode === 85) || 
+            (e.ctrlKey && e.keyCode === 83) || 
+            (e.ctrlKey && e.keyCode === 67) || 
+            (e.ctrlKey && e.keyCode === 88)
+          ) {
+            e.preventDefault();
+            return false;
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="intro-screen" id="introScreen">
+      <div class="intro-stars"></div>
+      <div class="shooting-star star-one"></div>
+      <div class="shooting-star star-two"></div>
+      <div class="shooting-star star-three"></div>
+      <div class="intro-content">
+        <div class="intro-name">@Herin38</div>
+        <div class="intro-circle"></div>
+        <div class="intro-start">[ click to start ]</div>
+      </div>
+    </div>
+
+    <main class="landing-page">
+      <section class="hero-profile">
+
+        <h1 class="hero-quote"><span id="typewriter">自分を変えてみてください</span><span class="cursor">|</span></h1>
+
+        <div class="info-grid">
+          <div class="glass-card discord-card">
+            <div class="discord-banner" id="discordBanner"></div>
+            <div class="discord-card-body">
+              <div class="discord-avatar-wrap">
+                <img class="card-avatar" id="mainAvatarImg" src="./png/mmb.png" alt="Herin Avatar" />
+                <img class="discord-avatar-frame" id="mainFrame" alt="Discord Avatar Decoration" style="display: none;" />
+                <span class="status-dot avatar-status" id="mainStatusIndicator"></span>
+              </div>
+              <div class="badge-row" id="discordBadges"></div>
+              <div class="card-content">
+                <div class="card-title-row">
+                  <strong id="discordDisplayName">Herin38</strong>
+                  <span id="discordUsername" class="discord-username">@herin_38</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="now-playing">
+          <span class="card-label">NOW PLAYING</span>
+          <div class="player-row">
+            <div class="music-disc-wrap">
+              <img class="album-cover small" src="./png/dep.gif" alt="Music Cover" />
+              <div class="disc-hole"></div>
+            </div>
+            <div class="player-info">
+              <strong id="trackInfo">Wrong Times ( ft. FOWLEX Snowz )</strong>
+              <div class="progress-row">
+                <span id="current">00:00</span>
+                <input type="range" id="progress" value="0" />
+                <span id="duration">00:00</span>
+              </div>
+              <div class="buttons">
+                <button id="prev">⏮</button>
+                <button id="play">▶</button>
+                <button id="next">⏭</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-links">
+          <a href="https://www.facebook.com/share/18yfN2Kh6P/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-link facebook" title="Facebook">
+            <i class="fa-brands fa-facebook"></i>
+          </a>
+          <a href="https://discord.gg/fhzmQ9jGdf" target="_blank" rel="noopener noreferrer" class="social-link discord" title="Discord">
+            <i class="fa-brands fa-discord"></i>
+          </a>
+          <a href="https://t.me/herin38" target="_blank" rel="noopener noreferrer" class="social-link telegram" title="Telegram">
+            <i class="fa-brands fa-telegram"></i>
+          </a>
+        </div>
+
+        <div class="scroll-indicator" id="scrollIndicator">
+          <span class="scroll-text">SCROLL</span>
+          <div class="scroll-arrow">
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+        </div>
+      </section>
+
+      <section class="projects-section" id="projectsSection">
+        <span class="section-label">MY SITES</span>
+        
+        <div class="projects-grid">
+          <a href="https://khorobux.com/" target="_blank" class="project-card">
+            <div class="project-link-icon">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+            <div class="project-logo-wrap">
+              <img src="./png/khoroblox.gif" alt="K" class="project-logo" onerror="this.onerror=null; this.outerHTML='<div class=&quot;project-logo-fallback khorobux-color&quot;>K</div>';" />
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Khorobux</h3>
+              <p class="project-desc">Nơi kiếm tiền online</p>
+            </div>
+          </a>
+          
+          <a href="https://blackrb.store/" target="_blank" class="project-card">
+            <div class="project-link-icon">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+            <div class="project-logo-wrap">
+              <img src="./png/blackrb.jpg" alt="B" class="project-logo" onerror="this.onerror=null; this.outerHTML='<div class=&quot;project-logo-fallback blackrb-color&quot;>B</div>';" />
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">BlackRB Store</h3>
+              <p class="project-desc">Nơi cung cấp dịch vụ gamepass, robux, vv</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <footer class="footer">
+        © 2026 by herin38 stop skid me
+      </footer>
+    </main>
+
+    <audio id="audio" src="mp3/nhac.mp3"></audio>
+
+    <script>
+      const audio = document.getElementById("audio");
+      const playBtn = document.getElementById("play");
+      const prevBtn = document.getElementById("prev");
+      const nextBtn = document.getElementById("next");
+      const progress = document.getElementById("progress");
+      const current = document.getElementById("current");
+      const duration = document.getElementById("duration");
+      const trackInfo = document.getElementById("trackInfo");
+
+      const playlist = [
+        { src: "mp3/nhac.mp3", title: "Wrong Times ( ft. FOWLEX Snowz )", cover: "./png/wrong time.png" },
+        { src: "mp3/nhac2.mp3", title: "《Cry For Me（feat。Ami》）»Michita / Ami完整版", cover: "./png/cryforme.png" },
+        { src: "mp3/nhac3.mp3", title: "Indila - Love Story", cover: "./png/Indila.jpg" },
+        { src: "mp3/UdieNnx.mp3", title: "UdieNnx - STRUCT", cover: "./png/udiemnx.jpg" },
+        { src: "mp3/NBSPLV.mp3", title: "NBSPLV - Lost Soul", cover: "./png/nbsplv.jpg" }
+      ];
+
+      let currentTrack = Math.floor(Math.random() * playlist.length);
+
+      function formatTime(seconds) {
+        const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+        const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+      }
+
+      function loadTrack(trackIndex) {
+        const track = playlist[trackIndex];
+        audio.src = track.src;
+        trackInfo.textContent = track.title;
+        
+        // Dynamically update the album cover in the music disc
+        const albumCover = document.querySelector(".music-disc-wrap .album-cover.small");
+        if (albumCover) {
+          albumCover.src = track.cover;
+        }
+        
+        audio.load();
+      }
+
+      function playTrack() {
+        audio.play().then(() => {
+          playBtn.textContent = "⏸";
+        }).catch(() => {
+          playBtn.textContent = "▶";
+        });
+      }
+
+      function pauseTrack() {
+        audio.pause();
+        playBtn.textContent = "▶";
+      }
+
+      function nextTrack() {
+        currentTrack = (currentTrack + 1) % playlist.length;
+        loadTrack(currentTrack);
+        playTrack();
+      }
+
+      function prevTrack() {
+        currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+        loadTrack(currentTrack);
+        playTrack();
+      }
+
+      function initAudioMetadata() {
+        if (!isNaN(audio.duration) && audio.duration > 0) {
+          duration.textContent = formatTime(audio.duration);
+          progress.max = audio.duration;
+        }
+      }
+
+      audio.addEventListener("loadedmetadata", initAudioMetadata);
+      if (audio.readyState >= 1) {
+        initAudioMetadata();
+      }
+
+      audio.addEventListener("timeupdate", () => {
+        if (!isNaN(audio.currentTime)) {
+          progress.value = audio.currentTime;
+          current.textContent = formatTime(audio.currentTime);
+        }
+      });
+
+      progress.addEventListener("input", () => {
+        audio.currentTime = progress.value;
+      });
+
+      playBtn.addEventListener("click", () => {
+        audio.paused ? playTrack() : pauseTrack();
+      });
+
+      audio.addEventListener("play", () => {
+        const discWrap = document.querySelector(".music-disc-wrap");
+        if (discWrap) discWrap.classList.add("playing");
+        playBtn.textContent = "⏸";
+      });
+
+      audio.addEventListener("pause", () => {
+        const discWrap = document.querySelector(".music-disc-wrap");
+        if (discWrap) discWrap.classList.remove("playing");
+        playBtn.textContent = "▶";
+      });
+
+      prevBtn.addEventListener("click", prevTrack);
+      nextBtn.addEventListener("click", nextTrack);
+      audio.addEventListener("ended", nextTrack);
+
+      // Click on the music disc to play a random track
+      const discWrap = document.querySelector(".music-disc-wrap");
+      if (discWrap) {
+        discWrap.style.cursor = "pointer";
+        discWrap.title = "Click to play a random song";
+        discWrap.addEventListener("click", () => {
+          let randomTrack = currentTrack;
+          if (playlist.length > 1) {
+            while (randomTrack === currentTrack) {
+              randomTrack = Math.floor(Math.random() * playlist.length);
+            }
+          }
+          currentTrack = randomTrack;
+          loadTrack(currentTrack);
+          playTrack();
+        });
+      }
+
+      loadTrack(currentTrack);
+    </script>
+  </body>
+</html>
